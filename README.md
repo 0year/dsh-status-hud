@@ -6,6 +6,15 @@
 
 > Android 10+（已在小米 9 / MIUI 12 / Android 10 上验证）· 需要 [Shizuku](https://shizuku.rikka.app/)（免 root）· MIT License
 
+## 为什么做这个（背景）
+
+在手机上用 **DSHBox** 跑 agent 时，任务一旦转到后台执行，用户就**看不到任何进展**：
+不知道它还在干活、是不是卡住了、还是在等自己确认。切出去做别的事只能干等。
+
+本项目把 DSH agent 的实时活动（正在调用的工具、等待确认、完成/空闲）做成
+**状态栏级的滚动条**：在任何 App（刷 B 站、看视频、回消息）的上方都能看到后台进度，
+不用切回 DSHBox。配合 `plugin/` 插件全自动推送，装完即用。
+
 ![状态条效果](screenshots/statusbar-demo.png)
 
 ---
