@@ -1,0 +1,14 @@
+# build outputs / downloaded deps
+android/build/
+dist/*.apk.idsig
+dist/*.idsig
+*.idsig
+
+# IDE / OS
+.idea/
+*.iml
+.DS_Store
+*.swp
+
+# local DSH plugin install
+plugin/node_modules/

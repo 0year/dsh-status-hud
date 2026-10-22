@@ -1,0 +1,4 @@
+# 把状态服务插件注册成 cordis bundle 条目（形态与 @local/mobile-pilot 一致）
+- insert:
+    - id: '@local/dsh-status-hud'
+      name: '@local/dsh-status-hud'
