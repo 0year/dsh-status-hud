@@ -256,3 +256,16 @@ Shizuku 状态「运行中 / 已授权 / UserService 就绪（shell 可用）」
 完全没有读取 `View.setPadding()`，所以给滚动文字设水平偏移不生效。
 修复：`onDraw` 里改为 `baseX = padLeftPx + getPaddingLeft()`，动态读取。
 验证：xOffset=220 时，左侧时间/电量固定在 x≈29，滚动文字起点在 x≈670；偏移只影响滚动文字。
+
+## 插件 v2.0：自动推送任务信息（2026-10-22）
+
+- 早期插件只负责拉起状态服务；v2.0 起监听 DSH `session/event`：
+  - `turn/start` → running「🤖 处理中…」
+  - `tool/call`（event.data.name）→ running「🔧 <中文动作>（工具名）」，内置常见工具映射
+  - `approval/asked` → blocked「⏸ 等待你的确认」
+  - `turn/end`（活跃回合计数归零）→ idle
+- 500ms 合并 + 去重，非阻塞；`ctx.on('dispose')` 清理监听与子进程；加载失败只 warn。
+- 事件名与载荷来源：`dsh-agent-loop` 的 `session.append(...)`（turn/start、tool/call …），
+  监听方式参照 `dsh-agent-instructions` 的 `ctx.on("session/event", (session, event) => …)`。
+- 用假 ctx + 真实状态服务做了事件序列测试：running → 🔧 执行命令（bash）→ 🔧 点击手机控件（phone_click）
+  → ⏸ 等待确认 → idle，全部符合预期。

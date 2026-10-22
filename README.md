@@ -35,7 +35,22 @@
 > 停止方式：App 内「③ 停止状态条」会删除 `policy_control` 并恢复系统状态栏。
 > **升级提示**：APK 使用自动生成的调试签名；如果你自己重新构建过，覆盖安装前先卸载旧版。
 
-## 🔌 与 DSH 集成（让 agent 主动推送状态）
+## 🔌 与 DSH 集成（插件自动推送）
+
+`plugin/` 是一个 DSH 插件，装好后**自动**把 agent 活动推到状态条，无需手动调用：
+
+| DSH 事件 | 状态条显示 |
+|---|---|
+| `turn/start` | 🤖 处理中… |
+| `tool/call` | 🔧 执行命令（bash）/ 点击手机控件（phone_click）… |
+| `approval/asked` | ⏸ 等待你的确认 |
+| `turn/end`（无活跃回合） | 暂时没有新的任务 |
+
+安装：把 `plugin/` 复制到 DSH profile 的 `node_modules/@local/dsh-status-hud/`，
+并在 profile `package.json` 的 `dsh.profile.bundles` 里加 `"@local/dsh-status-hud"`，重启 DSH 生效。
+详见 [`plugin/README.md`](plugin/README.md)。插件还会在 DSH 启动时自动拉起状态服务。
+
+**手动推送**（脚本/agent 想自己控制时）：
 
 ```bash
 # 启动状态服务（默认 127.0.0.1:8790）
@@ -58,10 +73,6 @@ HTTP API：
 | `GET` | `/status` | 读取当前状态 |
 | `POST` | `/done` / `/idle` | 完成 / 空闲 |
 | `POST` | `/report` | 手机端回传诊断日志 |
-
-**DSH 自启动插件**（可选）：把 `plugin/` 安装进 DSH 的 profile（放到
-`node_modules/@local/dsh-status-hud`，并在 profile 的 `dsh.profile.bundles` 追加一条），
-DSH 启动时会自动拉起状态服务；详见 `plugin/cordis.patch.yml`。
 
 ## 🛠 自行构建
 
@@ -104,7 +115,7 @@ cd android && bash build.sh
 android/            Android 源码与手动构建脚本（aidl/javac/d8/aapt/apksigner）
   src/              HudService / MainActivity / RingTextView / ShizukuShell / UserService ...
 server/             状态服务（Node.js，HTTP + CLI）
-plugin/             DSH 自启动插件（cordis bundle）
+plugin/             DSH 自动推送插件（监听 agent 事件，cordis bundle）
 scripts/            依赖下载脚本
 docs/DEVLOG.md      开发日志（Shizuku 打包踩坑、坐标/对齐、policy_control 调试记录）
 screenshots/        效果截图

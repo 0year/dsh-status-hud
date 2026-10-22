@@ -1,8 +1,9 @@
 {
   "name": "@local/dsh-status-hud",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "commonjs",
+  "description": "DSH 插件：自动把 agent 活动（工具调用/等待确认/回合结束）推送到 Android 状态条，并拉起状态服务",
   "main": "lib/index.js",
   "dsh": {
     "bundle": {
