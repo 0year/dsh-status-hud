@@ -134,3 +134,9 @@ dist/               构建产物
 ## 📄 License
 
 [MIT](LICENSE)
+
+---
+
+## 相关项目
+
+- [dsh-qq-brain](https://github.com/0year/dsh-qq-brain) —— 双通道事件驱动 QQ 群聊大脑：大缓冲积累认知、小窗口判断兴趣、关键词廉价唤醒。配合本项目的 QQ 桥使用（手机监听通知 → 大脑处理 → 需要时自动发回 QQ）。
