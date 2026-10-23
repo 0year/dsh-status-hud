@@ -140,3 +140,20 @@ dist/               构建产物
 ## 相关项目
 
 - [dsh-qq-brain](https://github.com/0year/dsh-qq-brain) —— 双通道事件驱动 QQ 群聊大脑：大缓冲积累认知、小窗口判断兴趣、关键词廉价唤醒。配合本项目的 QQ 桥使用（手机监听通知 → 大脑处理 → 需要时自动发回 QQ）。
+
+---
+
+## QQ 桥（把 QQ 变成 DSH 的输入/输出通道）
+
+仓库里现在包含完整的 QQ 桥组件：
+
+| 组件 | 说明 |
+|---|---|
+| `qqbridge-app/` | Android App：监听 QQ 通知（白名单/去重）、提取发送者/内容、通过 HTTP 交给沙盒；支持 RemoteInput 直回（QQ 暂不支持时自动退回 UI 自动化），前台服务保活 + 开机/更新自启 |
+| `qq-bridge/bridge.js` | 沙盒 relay：轮询发送队列 → shell/UI 自动化打开 QQ → **按标点分条**、按字数延迟发送 → 切回宿主 → 息屏自适应；群聊用 `am start + 标题校验/搜索兜底`（不用 contentIntent，避免跳错会话）；同一聊天连续消息**批量一次打开** |
+| `qq-bridge/supervise.sh` | 保活：状态服务 + relay + qq-brain 大脑 |
+
+配套的「双通道事件驱动 QQ 群聊大脑」在独立仓库：
+**[dsh-qq-brain](https://github.com/0year/dsh-qq-brain)** —— 长期学习人物画像/群语言风格、关键词廉价唤醒、每天日记 + 每周周报。
+
+`qq-bridge/config.example.json` 里可配白名单（`whitelist.names`，只有这些人会收到自动回复）。
