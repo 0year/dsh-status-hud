@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dshstatus.qqbridge"
+    android:versionCode="6"
+    android:versionName="1.5">
+
+    <uses-sdk android:minSdkVersion="29" android:targetSdkVersion="29" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:label="QQ 桥"
+        android:allowBackup="false"
+        android:usesCleartextTraffic="true"
+        android:theme="@android:style/Theme.Material.NoActionBar">
+
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 需要用户在系统里开启「通知使用权」，或由 Shizuku 写 settings put secure enabled_notification_listeners -->
+        <service android:name=".KeepAliveService" android:exported="false" />
+        <receiver android:name=".StartupReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".QqNotificationService"
+            android:exported="true"
+            android:label="QQ 通知桥"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".QqReplyReceiver" android:exported="false" />
+    </application>
+</manifest>
